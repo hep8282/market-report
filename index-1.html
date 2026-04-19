@@ -1,0 +1,1575 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>데일리 마켓 리포트 | 2026.04.19</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #0a0e1a;
+    --surface: #111827;
+    --surface2: #1a2235;
+    --border: #1e2d45;
+    --accent: #00c8ff;
+    --accent2: #00ff9d;
+    --danger: #ff4d6d;
+    --warn: #ffb830;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --up: #00e676;
+    --down: #ff4d6d;
+    --neutral: #94a3b8;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, #0a0e1a 0%, #0f1929 50%, #081420 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 18px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .logo-badge {
+    background: linear-gradient(135deg, var(--accent), #0080ff);
+    color: #000;
+    font-weight: 900;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    padding: 5px 10px;
+    border-radius: 4px;
+  }
+
+  .header-title {
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+  }
+
+  .header-sub {
+    font-size: 11px;
+    color: var(--muted);
+    font-family: 'IBM Plex Mono', monospace;
+    margin-top: 1px;
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .live-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: var(--accent2);
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  .live-dot {
+    width: 7px; height: 7px;
+    background: var(--accent2);
+    border-radius: 50%;
+    animation: pulse 1.5s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.8); }
+  }
+
+  /* Tabs */
+  .tabs {
+    display: flex;
+    gap: 2px;
+    padding: 12px 28px 0;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+  }
+
+  .tab {
+    padding: 9px 20px;
+    border-radius: 6px 6px 0 0;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--muted);
+    border: 1px solid transparent;
+    border-bottom: none;
+    transition: all 0.2s;
+    letter-spacing: 0.2px;
+  }
+
+  .tab:hover { color: var(--text); }
+
+  .tab.active {
+    background: var(--bg);
+    color: var(--accent);
+    border-color: var(--border);
+    font-weight: 700;
+  }
+
+  /* Main */
+  .main {
+    padding: 20px 28px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* Section title */
+  .section-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+    margin-top: 24px;
+  }
+
+  .section-head:first-child { margin-top: 0; }
+
+  .section-bar {
+    width: 3px;
+    height: 18px;
+    background: linear-gradient(var(--accent), #0060ff);
+    border-radius: 2px;
+  }
+
+  .section-title {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    color: var(--text);
+  }
+
+  .section-badge {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 3px;
+    background: rgba(0, 200, 255, 0.1);
+    color: var(--accent);
+    border: 1px solid rgba(0, 200, 255, 0.2);
+  }
+
+  /* Grid */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+
+  @media (max-width: 900px) {
+    .grid-4 { grid-template-columns: repeat(2, 1fr); }
+    .grid-3 { grid-template-columns: 1fr 1fr; }
+    .grid-2 { grid-template-columns: 1fr; }
+  }
+
+  /* Card */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent) 0%, transparent 100%);
+    opacity: 0.4;
+  }
+
+  /* Index card */
+  .index-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+  }
+
+  .index-name {
+    font-size: 11px;
+    color: var(--muted);
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .index-value {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 22px;
+    font-weight: 600;
+    line-height: 1;
+  }
+
+  .index-change {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 6px;
+  }
+
+  .badge-up {
+    background: rgba(0, 230, 118, 0.12);
+    color: var(--up);
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  .badge-down {
+    background: rgba(255, 77, 109, 0.12);
+    color: var(--down);
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  .badge-neutral {
+    background: rgba(148, 163, 184, 0.1);
+    color: var(--neutral);
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+  }
+
+  .index-meta {
+    font-size: 10px;
+    color: var(--muted);
+    margin-top: 4px;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  /* Chart container */
+  .chart-wrap {
+    position: relative;
+    height: 220px;
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  .chart-wrap-sm {
+    position: relative;
+    height: 160px;
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  /* Table */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+
+  .data-table th {
+    text-align: left;
+    padding: 8px 10px;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--muted);
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .data-table td {
+    padding: 9px 10px;
+    border-bottom: 1px solid rgba(30, 45, 69, 0.5);
+    vertical-align: middle;
+  }
+
+  .data-table tr:last-child td { border-bottom: none; }
+
+  .data-table tr:hover td {
+    background: rgba(0, 200, 255, 0.03);
+  }
+
+  .td-right { text-align: right; font-family: 'IBM Plex Mono', monospace; }
+  .td-center { text-align: center; }
+
+  .up { color: var(--up); }
+  .down { color: var(--down); }
+  .neutral { color: var(--neutral); }
+
+  /* Outlook box */
+  .outlook-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    padding: 16px 18px;
+    margin-bottom: 12px;
+  }
+
+  .outlook-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .outlook-text {
+    font-size: 12.5px;
+    line-height: 1.8;
+    color: var(--text);
+  }
+
+  /* Signal */
+  .signal-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(30, 45, 69, 0.4);
+  }
+
+  .signal-row:last-child { border-bottom: none; }
+
+  .signal-label { font-size: 12px; color: var(--neutral); }
+
+  .signal-val {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .signal-bar-wrap {
+    width: 80px;
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+    margin: 0 10px;
+  }
+
+  .signal-bar {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 1s ease;
+  }
+
+  /* Risk gauge */
+  .gauge-wrap {
+    display: flex;
+    justify-content: center;
+    padding: 10px 0 4px;
+  }
+
+  /* News item */
+  .news-item {
+    display: flex;
+    gap: 12px;
+    padding: 11px 0;
+    border-bottom: 1px solid rgba(30, 45, 69, 0.5);
+  }
+
+  .news-item:last-child { border-bottom: none; }
+
+  .news-time {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    white-space: nowrap;
+    margin-top: 2px;
+    min-width: 40px;
+  }
+
+  .news-badge {
+    font-size: 9px;
+    padding: 2px 6px;
+    border-radius: 3px;
+    white-space: nowrap;
+    height: fit-content;
+    margin-top: 2px;
+  }
+
+  .nb-bull { background: rgba(0, 230, 118, 0.1); color: var(--up); border: 1px solid rgba(0, 230, 118, 0.2); }
+  .nb-bear { background: rgba(255, 77, 109, 0.1); color: var(--down); border: 1px solid rgba(255, 77, 109, 0.2); }
+  .nb-neutral { background: rgba(148, 163, 184, 0.08); color: var(--neutral); border: 1px solid rgba(148, 163, 184, 0.15); }
+
+  .news-text { font-size: 12px; line-height: 1.6; }
+
+  /* Heatmap */
+  .heatmap {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 4px;
+    margin-top: 8px;
+  }
+
+  .hmap-cell {
+    border-radius: 4px;
+    padding: 10px 6px;
+    text-align: center;
+    font-size: 10px;
+    font-weight: 600;
+    cursor: default;
+    transition: transform 0.15s;
+  }
+
+  .hmap-cell:hover { transform: scale(1.05); }
+
+  .hmap-name { font-size: 9px; color: rgba(255,255,255,0.7); margin-bottom: 3px; }
+  .hmap-chg { font-family: 'IBM Plex Mono', monospace; font-size: 11px; }
+
+  /* Footer */
+  .page-footer {
+    margin-top: 32px;
+    padding: 18px 0;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .footer-note {
+    font-size: 10px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  .footer-logo {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 1px;
+  }
+
+  /* Divider */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 20px 0;
+  }
+
+  /* Sparkline mini */
+  .mini-spark {
+    display: inline-block;
+    width: 60px;
+    height: 24px;
+    vertical-align: middle;
+  }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <div class="header-left">
+    <div class="logo-badge">MARKET</div>
+    <div>
+      <div class="header-title">데일리 마켓 리포트</div>
+      <div class="header-sub">2026.04.19 SUN · KST 기준 (04.17 금요일 종가)</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="live-badge">
+      <div class="live-dot"></div>
+      LIVE DATA
+    </div>
+  </div>
+</div>
+
+<!-- Tabs -->
+<div class="tabs">
+  <div class="tab active" onclick="showTab('equity')">📈 주식시장</div>
+  <div class="tab" onclick="showTab('bond')">🏦 채권시장</div>
+  <div class="tab" onclick="showTab('global')">🌐 글로벌</div>
+  <div class="tab" onclick="showTab('outlook')">🔭 전망</div>
+  <div class="tab" onclick="showTab('response')">✍️ 시장이야기</div>
+</div>
+
+<!-- ======================== EQUITY ======================== -->
+<div class="main">
+<div id="equity" class="page active">
+
+  <!-- Index cards -->
+  <div class="section-head">
+    <div class="section-bar"></div>
+    <div class="section-title">주요 지수</div>
+    <div class="section-badge">04.17 종가 기준</div>
+  </div>
+
+  <div class="grid-4">
+    <div class="index-card">
+      <div class="index-name">KOSPI</div>
+      <div class="index-value" style="color:#e2e8f0">6,091.39</div>
+      <div class="index-change">
+        <span class="badge-up">▲ +0.71%</span>
+        <span style="font-family:monospace;font-size:11px;color:var(--up)">+43.2pt</span>
+      </div>
+      <div class="index-meta">거래대금 18.4조원</div>
+    </div>
+    <div class="index-card">
+      <div class="index-name">KOSDAQ</div>
+      <div class="index-value" style="color:#e2e8f0">1,120.51</div>
+      <div class="index-change">
+        <span class="badge-up">▲ +0.48%</span>
+        <span style="font-family:monospace;font-size:11px;color:var(--up)">+5.37pt</span>
+      </div>
+      <div class="index-meta">거래대금 7.2조원</div>
+    </div>
+    <div class="index-card">
+      <div class="index-name">KOSPI200 선물</div>
+      <div class="index-value" style="color:#e2e8f0">812.30</div>
+      <div class="index-change">
+        <span class="badge-up">▲ +0.63%</span>
+      </div>
+      <div class="index-meta">야간선물 반영</div>
+    </div>
+    <div class="index-card">
+      <div class="index-name">원/달러 환율</div>
+      <div class="index-value" style="color:#e2e8f0">1,474.9</div>
+      <div class="index-change">
+        <span class="badge-down">▼ -0.18%</span>
+        <span style="font-family:monospace;font-size:11px;color:var(--down)">-2.6원</span>
+      </div>
+      <div class="index-meta">서울외환시장 기준</div>
+    </div>
+  </div>
+
+  <!-- Charts -->
+  <div class="grid-2" style="margin-top:14px">
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div style="font-size:12px;font-weight:700">KOSPI 주간 흐름</div>
+        <span class="badge-up">▲ +5.81% (1개월)</span>
+      </div>
+      <div class="chart-wrap">
+        <canvas id="kospiChart"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div style="font-size:12px;font-weight:700">KOSDAQ 주간 흐름</div>
+        <span class="badge-up">▲ +4.27% (1개월)</span>
+      </div>
+      <div class="chart-wrap">
+        <canvas id="kosdaqChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sector heatmap -->
+  <div class="section-head" style="margin-top:20px">
+    <div class="section-bar"></div>
+    <div class="section-title">업종별 등락률</div>
+    <div class="section-badge">전일대비</div>
+  </div>
+
+  <div class="card" style="padding:14px">
+    <div class="heatmap" id="sectorHeatmap"></div>
+  </div>
+
+  <!-- Top movers -->
+  <div class="grid-2" style="margin-top:14px">
+    <div class="card">
+      <div style="font-size:12px;font-weight:700;margin-bottom:10px">📊 외국인 순매수 상위</div>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>종목</th>
+            <th class="td-right">현재가</th>
+            <th class="td-right">등락률</th>
+            <th class="td-right">순매수(억)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>삼성전자</td><td class="td-right">87,400</td><td class="td-right up">+1.87%</td><td class="td-right up">+3,214</td></tr>
+          <tr><td>SK하이닉스</td><td class="td-right">224,500</td><td class="td-right up">+2.14%</td><td class="td-right up">+2,108</td></tr>
+          <tr><td>LG에너지솔루션</td><td class="td-right">368,000</td><td class="td-right up">+3.42%</td><td class="td-right up">+1,876</td></tr>
+          <tr><td>현대차</td><td class="td-right">253,000</td><td class="td-right down">-0.39%</td><td class="td-right up">+943</td></tr>
+          <tr><td>NAVER</td><td class="td-right">192,500</td><td class="td-right up">+1.05%</td><td class="td-right up">+721</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card">
+      <div style="font-size:12px;font-weight:700;margin-bottom:10px">📊 기관 순매수 상위</div>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>종목</th>
+            <th class="td-right">현재가</th>
+            <th class="td-right">등락률</th>
+            <th class="td-right">순매수(억)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>삼성SDI</td><td class="td-right">412,000</td><td class="td-right up">+4.31%</td><td class="td-right up">+1,542</td></tr>
+          <tr><td>포스코홀딩스</td><td class="td-right">384,500</td><td class="td-right up">+2.67%</td><td class="td-right up">+1,087</td></tr>
+          <tr><td>카카오</td><td class="td-right">48,900</td><td class="td-right up">+1.24%</td><td class="td-right up">+834</td></tr>
+          <tr><td>KB금융</td><td class="td-right">89,200</td><td class="td-right down">-0.11%</td><td class="td-right up">+612</td></tr>
+          <tr><td>셀트리온</td><td class="td-right">183,200</td><td class="td-right up">+0.88%</td><td class="td-right up">+487</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Volume / Breadth -->
+  <div class="grid-2" style="margin-top:14px">
+    <div class="card">
+      <div style="font-size:12px;font-weight:700;margin-bottom:12px">수급 현황 (KOSPI, 억원)</div>
+      <div class="chart-wrap-sm">
+        <canvas id="flowChart"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <div style="font-size:12px;font-weight:700;margin-bottom:12px">시장 폭 지표 (KOSPI)</div>
+      <div class="signal-row">
+        <span class="signal-label">상승 종목</span>
+        <div class="signal-bar-wrap"><div class="signal-bar" style="width:62%;background:var(--up)"></div></div>
+        <span class="signal-val up">524</span>
+      </div>
+      <div class="signal-row">
+        <span class="signal-label">하락 종목</span>
+        <div class="signal-bar-wrap"><div class="signal-bar" style="width:31%;background:var(--down)"></div></div>
+        <span class="signal-val down">261</span>
+      </div>
+      <div class="signal-row">
+        <span class="signal-label">보합 종목</span>
+        <div class="signal-bar-wrap"><div class="signal-bar" style="width:7%;background:var(--neutral)"></div></div>
+        <span class="signal-val neutral">62</span>
+      </div>
+      <div class="signal-row">
+        <span class="signal-label">ADR(5일)</span>
+        <div class="signal-bar-wrap"><div class="signal-bar" style="width:72%;background:var(--accent)"></div></div>
+        <span class="signal-val" style="color:var(--accent)">118.4</span>
+      </div>
+      <div class="signal-row">
+        <span class="signal-label">투자심리선(10일)</span>
+        <div class="signal-bar-wrap"><div class="signal-bar" style="width:70%;background:var(--warn)"></div></div>
+        <span class="signal-val" style="color:var(--warn)">70%</span>
+      </div>
+      <div class="signal-row">
+        <span class="signal-label">52주 신고가</span>
+        <div class="signal-bar-wrap"></div>
+        <span class="signal-val up">47</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <div class="footer-note">※ 본 자료는 투자 참고용으로 작성되었으며, 투자의 최종 판단과 책임은 투자자 본인에게 있습니다.<br>데이터 출처: KRX, Bloomberg, 한국투자증권 리서치센터</div>
+    <div class="footer-logo">DAILY REPORT</div>
+  </div>
+</div>
+
+<!-- ======================== BOND ======================== -->
+<div id="bond" class="page">
+
+  <div class="section-head">
+    <div class="section-bar" style="background:linear-gradient(var(--warn),#ff8c00)"></div>
+    <div class="section-title">금리 현황</div>
+    <div class="section-badge" style="color:var(--warn);border-color:rgba(255,184,48,0.3);background:rgba(255,184,48,0.08)">04.17 기준</div>
+  </div>
+
+  <div class="grid-4">
+    <div class="index-card">
+      <div class="index-name">국고채 3년</div>
+      <div class="index-value" style="color:var(--warn)">2.94<span style="font-size:14px">%</span></div>
+      <div class="index-change"><span class="badge-up">▲ +3bp</span></div>
+      <div class="index-meta">전일 2.91%</div>
+    </div>
+    <div class="index-card">
+      <div class="index-name">국고채 10년</div>
+      <div class="index-value" style="color:var(--warn)">3.18<span style="font-size:14px">%</span></div>
+      <div class="index-change"><span class="badge-up">▲ +4bp</span></div>
+      <div class="index-meta">전일 3.14%</div>
+    </div>
+    <div class="index-card">
+      <div class="index-name">통안채 91일</div>
+      <div class="index-value" style="color:var(--warn)">2.72<span style="font-size:14px">%</span></div>
+      <div class="index-change"><span class="badge-neutral">■ 0bp</span></div>
+      <div class="index-meta">전일 2.72%</div>
+    </div>
+    <div class="index-card">
+      <div class="index-name">회사채 AA-(3년)</div>
+      <div class="index-value" style="color:var(--warn)">3.48<span style="font-size:14px">%</span></div>
+      <div class="index-change">
+        <span class="badge-up">▲ +2bp</span>
+        <span style="font-size:10px;color:var(--muted)">스프레드 54bp</span>
+      </div>
+      <div class="index-meta">전일 3.46%</div>
+    </div>
+  </div>
+
+  <!-- Yield curve + trend -->
+  <div class="grid-2" style="margin-top:14px">
+    <div class="card">
+      <div style="font-size:12px;font-weight:700">수익률 곡선 (Yield Curve)</div>
+      <div class="chart-wrap">
+        <canvas id="yieldCurveChart"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <div style="font-size:12px;font-weight:700">국고채 3/10년 스프레드 추이</div>
+      <div class="chart-wrap">
+        <canvas id="spreadChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOK / Fed -->
+  <div class="section-head" style="margin-top:20px">
+    <div class="section-bar" style="background:linear-gradient(var(--warn),#ff8c00)"></div>
+    <div class="section-title">통화정책 동향</div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div style="font-size:12px;font-weight:600;margin-bottom:12px">🇰🇷 한국은행 기준금리</div>
+      <div style="display:flex;align-items:flex-end;gap:10px;margin-bottom:14px">
+        <div style="font-family:monospace;font-size:32px;font-weight:700;color:var(--warn)">2.50<span style="font-size:16px">%</span></div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:8px">동결 (2026.02.27)</div>
+      </div>
+      <div class="chart-wrap-sm">
+        <canvas id="bokChart"></canvas>
+      </div>
+      <div style="margin-top:12px;font-size:11px;color:var(--neutral);line-height:1.8">
+        📌 다음 회의: <strong style="color:var(--text)">2026.05.29</strong><br>
+        📌 시장 기대: 동결 확률 <strong style="color:var(--up)">72%</strong> | 인하(25bp) <strong style="color:var(--warn)">28%</strong>
+      </div>
+    </div>
+    <div class="card">
+      <div style="font-size:12px;font-weight:600;margin-bottom:12px">🇺🇸 미 연준 기준금리 (FFR)</div>
+      <div style="display:flex;align-items:flex-end;gap:10px;margin-bottom:14px">
+        <div style="font-family:monospace;font-size:32px;font-weight:700;color:var(--accent)">4.50<span style="font-size:16px">%</span></div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:8px">상단 기준 · 동결</div>
+      </div>
+      <div style="margin-top:4px;font-size:11px;color:var(--neutral);line-height:1.9">
+        📌 다음 FOMC: <strong style="color:var(--text)">2026.04.28~29</strong><br>
+        📌 첫 인하 예상: <strong style="color:var(--text)">2026.12</strong> (25bp 1회)<br>
+        📌 핵심 PCE 전망: <strong style="color:var(--warn)">3.1%</strong> (기존 2.7%→상향)<br>
+        📌 GDP 성장 전망: <strong style="color:var(--text)">2.1%</strong> (기존 2.4%→하향)<br>
+        📌 2026 인하 횟수: <strong style="color:var(--accent)">1회(12월)</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bond market monitor -->
+  <div class="section-head" style="margin-top:20px">
+    <div class="section-bar" style="background:linear-gradient(var(--warn),#ff8c00)"></div>
+    <div class="section-title">국내외 주요 채권 지표</div>
+  </div>
+
+  <div class="card">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>구분</th>
+          <th class="td-right">현재</th>
+          <th class="td-right">전일비</th>
+          <th class="td-right">1주전</th>
+          <th class="td-right">1개월전</th>
+          <th class="td-right">방향성</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>국고채 1년</td><td class="td-right">2.74%</td><td class="td-right up">+2bp</td><td class="td-right">2.69%</td><td class="td-right">2.61%</td><td class="td-right up">▲ 상승</td></tr>
+        <tr><td>국고채 3년</td><td class="td-right">2.94%</td><td class="td-right up">+3bp</td><td class="td-right">2.87%</td><td class="td-right">2.78%</td><td class="td-right up">▲ 상승</td></tr>
+        <tr><td>국고채 5년</td><td class="td-right">3.06%</td><td class="td-right up">+3bp</td><td class="td-right">2.99%</td><td class="td-right">2.91%</td><td class="td-right up">▲ 상승</td></tr>
+        <tr><td>국고채 10년</td><td class="td-right">3.18%</td><td class="td-right up">+4bp</td><td class="td-right">3.10%</td><td class="td-right">3.01%</td><td class="td-right up">▲ 상승</td></tr>
+        <tr><td>국고채 30년</td><td class="td-right">3.08%</td><td class="td-right up">+2bp</td><td class="td-right">3.02%</td><td class="td-right">2.96%</td><td class="td-right up">▲ 상승</td></tr>
+        <tr><td>미국채 2년</td><td class="td-right">3.98%</td><td class="td-right down">-5bp</td><td class="td-right">4.07%</td><td class="td-right">4.18%</td><td class="td-right down">▼ 하락</td></tr>
+        <tr><td>미국채 10년</td><td class="td-right">4.31%</td><td class="td-right down">-3bp</td><td class="td-right">4.38%</td><td class="td-right">4.52%</td><td class="td-right down">▼ 하락</td></tr>
+        <tr><td>한·미 10년 스프레드</td><td class="td-right" style="color:var(--warn)">-113bp</td><td class="td-right up">+1bp</td><td class="td-right">-128bp</td><td class="td-right">-151bp</td><td class="td-right up">▲ 축소</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="page-footer">
+    <div class="footer-note">※ 금리 상승은 채권 가격 하락을 의미합니다. 본 자료는 투자 참고용입니다.<br>데이터 출처: 금융투자협회, 한국은행, Bloomberg</div>
+    <div class="footer-logo">DAILY REPORT</div>
+  </div>
+</div>
+
+<!-- ======================== GLOBAL ======================== -->
+<div id="global" class="page">
+
+  <div class="section-head">
+    <div class="section-bar" style="background:linear-gradient(#a78bfa,#7c3aed)"></div>
+    <div class="section-title">글로벌 시장</div>
+    <div class="section-badge" style="color:#a78bfa;border-color:rgba(167,139,250,0.3);background:rgba(167,139,250,0.08)">04.17 종가</div>
+  </div>
+
+  <div class="grid-4">
+    <div class="index-card">
+      <div class="index-name">S&P 500</div>
+      <div class="index-value" style="color:#e2e8f0">7,001.7</div>
+      <div class="index-change"><span class="badge-up">▲ +0.64%</span></div>
+      <div class="index-meta">M7 전반 강세</div>
+    </div>
+    <div class="index-card">
+      <div class="index-name">나스닥 100</div>
+      <div class="index-value" style="color:#e2e8f0">26,040.7</div>
+      <div class="index-change"><span class="badge-up">▲ +1.02%</span></div>
+      <div class="index-meta">기술주 주도</div>
+    </div>
+    <div class="index-card">
+      <div class="index-name">닛케이 225</div>
+      <div class="index-value" style="color:#e2e8f0">58,134.2</div>
+      <div class="index-change"><span class="badge-down">▼ -0.31%</span></div>
+      <div class="index-meta">엔화 약세 지속</div>
+    </div>
+    <div class="index-card">
+      <div class="index-name">상하이종합</div>
+      <div class="index-value" style="color:#e2e8f0">3,284.6</div>
+      <div class="index-change"><span class="badge-down">▼ -0.17%</span></div>
+      <div class="index-meta">내수 부진 지속</div>
+    </div>
+  </div>
+
+  <div class="grid-4" style="margin-top:12px">
+    <div class="index-card">
+      <div class="index-name">WTI 유가</div>
+      <div class="index-value" style="color:var(--warn)">91.28<span style="font-size:14px">$/bbl</span></div>
+      <div class="index-change"><span class="badge-down">▼ -7.87%</span></div>
+      <div class="index-meta">이란 협상 기대감↑</div>
+    </div>
+    <div class="index-card">
+      <div class="index-name">금(Gold)</div>
+      <div class="index-value" style="color:var(--warn)">4,823.6<span style="font-size:14px">$/oz</span></div>
+      <div class="index-change"><span class="badge-down">▼ -0.44%</span></div>
+      <div class="index-meta">위험선호 개선</div>
+    </div>
+    <div class="index-card">
+      <div class="index-name">달러인덱스(DXY)</div>
+      <div class="index-value" style="color:#e2e8f0">97.88</div>
+      <div class="index-change"><span class="badge-down">▼ -0.28%</span></div>
+      <div class="index-meta">약달러 기조</div>
+    </div>
+    <div class="index-card">
+      <div class="index-name">VIX 공포지수</div>
+      <div class="index-value" style="color:var(--up)">19.2</div>
+      <div class="index-change"><span class="badge-down">▼ -1.8pt</span></div>
+      <div class="index-meta">변동성 완화</div>
+    </div>
+  </div>
+
+  <!-- Global chart -->
+  <div class="card" style="margin-top:14px">
+    <div style="font-size:12px;font-weight:700;margin-bottom:4px">주요국 증시 성과 비교 (최근 1개월, %)</div>
+    <div class="chart-wrap">
+      <canvas id="globalChart"></canvas>
+    </div>
+  </div>
+
+  <!-- Key events -->
+  <div class="section-head" style="margin-top:20px">
+    <div class="section-bar" style="background:linear-gradient(#a78bfa,#7c3aed)"></div>
+    <div class="section-title">주요 이슈 & 뉴스 플로우</div>
+  </div>
+
+  <div class="card">
+    <div class="news-item">
+      <div class="news-time">04.16</div>
+      <span class="news-badge nb-bull">강세</span>
+      <div class="news-text">미국–이란 2차 협상 재개 기대감에 WTI 유가 7.87% 급락, 인플레 압력 완화 기대. M7 종목 전반 강세 (메타 +4.41%, 아마존 +3.81%, 엔비디아 +3.80%)</div>
+    </div>
+    <div class="news-item">
+      <div class="news-time">04.15</div>
+      <span class="news-badge nb-bull">강세</span>
+      <div class="news-text">한국투자증권 리서치: 연준 2026년 12월 1회(25bp) 인하 전망 유지. PCE 인플레 3.1%, GDP 2.1%로 하향. 스태그플레이션 지속 가능성 낮게 평가</div>
+    </div>
+    <div class="news-item">
+      <div class="news-time">04.13</div>
+      <span class="news-badge nb-neutral">중립</span>
+      <div class="news-text">미·이란 협상 결렬 악재에도 한국 수출 호조 소식으로 증시 낙폭 제한. 반도체 팔고 이차전지 산 외국인, LG에너지솔루션·삼성SDI 동반 강세</div>
+    </div>
+    <div class="news-item">
+      <div class="news-time">04.10</div>
+      <span class="news-badge nb-bear">위험</span>
+      <div class="news-text">중동 불확실성에 코스피 1.61% 하락, 5700선 후퇴. 차익실현 물량과 미·이란 협상 불확실성 겹쳐 약세</div>
+    </div>
+    <div class="news-item">
+      <div class="news-time">04.08</div>
+      <span class="news-badge nb-bull">강세</span>
+      <div class="news-text">미·이란 2주간 휴전 합의 소식에 코스피 7% 급등, 5800선 회복. 지정학적 리스크 프리미엄 급속 완화</div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <div class="footer-note">※ 국제 금융시장 데이터는 현지 종가 기준이며 환율 변동에 따라 달라질 수 있습니다.<br>데이터 출처: Bloomberg, Reuters, 한국투자증권</div>
+    <div class="footer-logo">DAILY REPORT</div>
+  </div>
+</div>
+
+<!-- ======================== OUTLOOK ======================== -->
+<div id="outlook" class="page">
+
+  <div class="section-head">
+    <div class="section-bar" style="background:linear-gradient(var(--accent2),#00aa66)"></div>
+    <div class="section-title">시장 전망 & 투자 전략</div>
+    <div class="section-badge" style="color:var(--accent2);border-color:rgba(0,255,157,0.3);background:rgba(0,255,157,0.06)">Research Analyst</div>
+  </div>
+
+  <!-- Market score -->
+  <div class="grid-4" style="margin-bottom:14px">
+    <div class="index-card" style="text-align:center">
+      <div class="index-name" style="text-align:center">주식시장 방향성</div>
+      <div style="font-size:28px;margin:8px 0">🟢</div>
+      <div style="font-size:13px;font-weight:700;color:var(--up)">BULLISH</div>
+      <div style="font-size:10px;color:var(--muted);margin-top:4px">단기 긍정</div>
+    </div>
+    <div class="index-card" style="text-align:center">
+      <div class="index-name" style="text-align:center">채권시장 방향성</div>
+      <div style="font-size:28px;margin:8px 0">🟡</div>
+      <div style="font-size:13px;font-weight:700;color:var(--warn)">NEUTRAL</div>
+      <div style="font-size:10px;color:var(--muted);margin-top:4px">금리 상승 압력</div>
+    </div>
+    <div class="index-card" style="text-align:center">
+      <div class="index-name" style="text-align:center">지정학 리스크</div>
+      <div style="font-size:28px;margin:8px 0">🟡</div>
+      <div style="font-size:13px;font-weight:700;color:var(--warn)">MODERATE</div>
+      <div style="font-size:10px;color:var(--muted);margin-top:4px">중동 불확실성</div>
+    </div>
+    <div class="index-card" style="text-align:center">
+      <div class="index-name" style="text-align:center">투자심리</div>
+      <div style="font-size:28px;margin:8px 0">🟢</div>
+      <div style="font-size:13px;font-weight:700;color:var(--up)">RISK-ON</div>
+      <div style="font-size:10px;color:var(--muted);margin-top:4px">VIX 19.2 완화</div>
+    </div>
+  </div>
+
+  <!-- Outlook sections -->
+  <div class="outlook-card">
+    <div class="outlook-label">📈 주식시장 단기 전망 (1~2주)</div>
+    <div class="outlook-text">
+      미·이란 휴전 협상 진전에 따른 에너지 가격 하락이 글로벌 인플레이션 부담을 완화시키며 위험자산 선호 흐름이 강화되고 있습니다. KOSPI는 미·이란 2차 협상 기대감이 지속되는 한 <strong>6,000~6,200pt</strong> 밴드 내 강세 흐름을 유지할 것으로 봅니다. 외국인의 반도체→이차전지 섹터 로테이션이 진행 중이며, LG에너지솔루션·삼성SDI 등 배터리 대형주에 모멘텀이 집중되고 있습니다. 단, 이란 협상 결렬 시 다시 5,700선 지지 여부를 테스트할 수 있어 리스크 관리가 필요합니다.
+    </div>
+  </div>
+
+  <div class="outlook-card" style="border-left-color:var(--warn)">
+    <div class="outlook-label" style="color:var(--warn)">🏦 채권시장 전망 (1개월)</div>
+    <div class="outlook-text">
+      국내 금리는 미국채 금리 하락세에도 불구, 국내 수급 불안(국고채 발행 확대)과 물가 불확실성으로 <strong>단기 상승 편향</strong>을 유지합니다. 국고채 3년 금리는 <strong>2.85~3.05%</strong> 범위에서 등락할 전망입니다. 한국은행은 5월 29일 회의에서 동결(72%) 가능성이 높으며, 연내 1회 인하(3분기)를 기본 시나리오로 유지합니다. 한·미 금리 역전 폭(-113bp)은 달러 강세 완화와 함께 점진적 축소 예상, 원화 약세 완화에도 기여할 것입니다.
+    </div>
+  </div>
+
+  <div class="outlook-card" style="border-left-color:#a78bfa">
+    <div class="outlook-label" style="color:#a78bfa">🌐 글로벌 매크로 뷰</div>
+    <div class="outlook-text">
+      이란 분쟁은 일시적 공급 충격을 키웠으나, 협상 진전 시 유가는 80달러대로 하락 압력을 받을 것입니다. 연준은 스태그플레이션 우려에도 불구 노동시장이 과열되지 않은 점을 감안, <strong>12월 1회(25bp) 인하</strong> 전 동결 기조를 유지할 전망입니다. 미국 핵심 인플레이션(Core PCE)은 연말까지 3% 수준에서 고착화될 가능성이 높습니다. 달러인덱스(DXY 97.9)는 98선 하단으로 추가 하락, 신흥국 자산 매력도 상승에 긍정적입니다.
+    </div>
+  </div>
+
+  <!-- Strategy -->
+  <div class="section-head" style="margin-top:20px">
+    <div class="section-bar" style="background:linear-gradient(var(--accent2),#00aa66)"></div>
+    <div class="section-title">포트폴리오 전략</div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div style="font-size:12px;font-weight:700;margin-bottom:12px">📦 자산배분 가이드</div>
+      <div class="chart-wrap-sm">
+        <canvas id="allocationChart"></canvas>
+      </div>
+      <div style="margin-top:12px">
+        <div class="signal-row">
+          <span class="signal-label">국내 주식</span>
+          <div class="signal-bar-wrap"><div class="signal-bar" style="width:45%;background:var(--up)"></div></div>
+          <span class="signal-val up">45%</span>
+        </div>
+        <div class="signal-row">
+          <span class="signal-label">해외 주식</span>
+          <div class="signal-bar-wrap"><div class="signal-bar" style="width:25%;background:var(--accent)"></div></div>
+          <span class="signal-val" style="color:var(--accent)">25%</span>
+        </div>
+        <div class="signal-row">
+          <span class="signal-label">채권</span>
+          <div class="signal-bar-wrap"><div class="signal-bar" style="width:20%;background:var(--warn)"></div></div>
+          <span class="signal-val" style="color:var(--warn)">20%</span>
+        </div>
+        <div class="signal-row">
+          <span class="signal-label">대안투자/현금</span>
+          <div class="signal-bar-wrap"><div class="signal-bar" style="width:10%;background:var(--neutral)"></div></div>
+          <span class="signal-val neutral">10%</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div style="font-size:12px;font-weight:700;margin-bottom:12px">🎯 주간 주목 종목 / 섹터</div>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>종목/섹터</th>
+            <th class="td-center">의견</th>
+            <th class="td-right">목표가</th>
+            <th>근거</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>LG에너지솔루션</td>
+            <td class="td-center"><span class="badge-up">BUY</span></td>
+            <td class="td-right">420,000</td>
+            <td style="font-size:11px;color:var(--muted)">외국인 수급 집중</td>
+          </tr>
+          <tr>
+            <td>삼성SDI</td>
+            <td class="td-center"><span class="badge-up">BUY</span></td>
+            <td class="td-right">480,000</td>
+            <td style="font-size:11px;color:var(--muted)">기관 매수 우위</td>
+          </tr>
+          <tr>
+            <td>SK하이닉스</td>
+            <td class="td-center"><span class="badge-up">BUY</span></td>
+            <td class="td-right">260,000</td>
+            <td style="font-size:11px;color:var(--muted)">HBM 수요 호조</td>
+          </tr>
+          <tr>
+            <td>에너지 섹터</td>
+            <td class="td-center"><span class="badge-neutral">HOLD</span></td>
+            <td class="td-right">-</td>
+            <td style="font-size:11px;color:var(--muted)">유가 하락 리스크</td>
+          </tr>
+          <tr>
+            <td>국고채 3년</td>
+            <td class="td-center"><span class="badge-neutral">중립</span></td>
+            <td class="td-right">2.90%</td>
+            <td style="font-size:11px;color:var(--muted)">금리 상승 부담</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div style="margin-top:14px;padding:10px;background:rgba(0,255,157,0.05);border:1px solid rgba(0,255,157,0.15);border-radius:6px">
+        <div style="font-size:10px;font-weight:700;color:var(--accent2);letter-spacing:1px;margin-bottom:5px">📌 WEEK POINT</div>
+        <div style="font-size:11px;color:var(--neutral);line-height:1.8">
+          ① 04.28~29 FOMC 점도표 업데이트 주목<br>
+          ② 이란 2차 협상 결과 → 에너지주 방향성 결정<br>
+          ③ 삼성전자 1Q26 실적 발표 (04.30 예정)
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <div class="footer-note">※ 본 자료는 투자 참고용으로 작성되었으며, 투자의 최종 판단과 책임은 투자자 본인에게 있습니다.<br>© 2026 Daily Market Report · 한국투자증권 리서치 참고</div>
+    <div class="footer-logo">DAILY REPORT</div>
+  </div>
+</div>
+
+<!-- ======================== 시장대응 ======================== -->
+<div id="response" class="page">
+
+  <style>
+    .essay-wrap {
+      max-width: 780px;
+      margin: 0 auto;
+    }
+    .essay-date {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+    }
+    .essay-title {
+      font-size: 22px;
+      font-weight: 900;
+      line-height: 1.35;
+      letter-spacing: -0.5px;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+    .essay-title span {
+      color: var(--accent);
+    }
+    .essay-subtitle {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 28px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    .essay-body {
+      font-size: 14px;
+      line-height: 2.1;
+      color: #c8d4e4;
+      word-break: keep-all;
+    }
+    .essay-body p {
+      margin-bottom: 22px;
+    }
+    .essay-quote {
+      border-left: 3px solid var(--accent);
+      padding: 14px 20px;
+      margin: 28px 0;
+      background: rgba(0,200,255,0.04);
+      border-radius: 0 6px 6px 0;
+    }
+    .essay-quote-text {
+      font-size: 15px;
+      font-style: italic;
+      color: var(--accent);
+      line-height: 1.8;
+      margin-bottom: 6px;
+    }
+    .essay-quote-source {
+      font-size: 11px;
+      color: var(--muted);
+      font-family: 'IBM Plex Mono', monospace;
+    }
+    .essay-history {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-top: 2px solid var(--warn);
+      border-radius: 6px;
+      padding: 18px 20px;
+      margin: 28px 0;
+    }
+    .essay-history-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      color: var(--warn);
+      margin-bottom: 10px;
+    }
+    .essay-history-text {
+      font-size: 13px;
+      line-height: 1.9;
+      color: var(--neutral);
+    }
+    .essay-keyword {
+      display: inline-block;
+      background: rgba(0,200,255,0.08);
+      border: 1px solid rgba(0,200,255,0.2);
+      color: var(--accent);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 9px;
+      border-radius: 3px;
+      margin: 0 2px;
+      font-family: 'IBM Plex Mono', monospace;
+    }
+    .essay-divider {
+      text-align: center;
+      color: var(--border);
+      font-size: 18px;
+      letter-spacing: 8px;
+      margin: 32px 0;
+    }
+    .essay-closing {
+      margin-top: 36px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.9;
+    }
+    .essay-closing strong {
+      color: var(--text);
+    }
+    .essay-tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 20px;
+    }
+    .essay-tag {
+      font-size: 11px;
+      padding: 3px 10px;
+      border-radius: 12px;
+      background: rgba(148,163,184,0.08);
+      color: var(--muted);
+      border: 1px solid var(--border);
+    }
+  </style>
+
+  <div class="essay-wrap">
+
+    <!-- 헤더 -->
+    <div class="card" style="margin-bottom:20px; padding:28px 32px;">
+      <div class="essay-date">2026.04.19 SUN · 시장 에세이</div>
+      <div class="essay-title">불안 속에서 피어난 <span>랠리</span>,<br>우리는 어디쯤 서 있는가</div>
+      <div class="essay-subtitle">WTI 급락·M7 강세·외국인 귀환 — 봄날의 시장이 건네는 질문</div>
+
+      <!-- 본문 -->
+      <div class="essay-body">
+
+        <p>
+          지난 한 주, 시장은 꽤나 드라마틱한 장면들을 연출하였습니다.
+          불과 열흘 전만 해도 코스피는 5,700선에서 아슬아슬하게 균형을 잡고 있었고,
+          중동의 화약고에서 날아오는 뉴스 한 줄에 투자자들의 손이 떨렸습니다.
+          그러나 4월 16일 장 마감 시점, 코스피는 <span class="essay-keyword">6,091</span>을 기록하며
+          불과 한 달 만에 5.81% 상승하였습니다.
+          두려움이 걷히자 숨어 있던 매수세가 한꺼번에 밀려왔습니다.
+        </p>
+
+        <div class="essay-quote">
+          <div class="essay-quote-text">"강세장은 비관 속에서 태어나고, 회의 속에서 성장하며,<br>낙관 속에서 성숙하고, 도취 속에서 죽는다."</div>
+          <div class="essay-quote-source">— 존 템플턴 (Sir John Templeton, 전설적 가치투자자)</div>
+        </div>
+
+        <p>
+          이 격언을 지금의 시장에 대입해보면 흥미로운 그림이 그려집니다.
+          우리는 지금 어느 계절에 서 있을까요.
+          이란 협상 재개 기대감에 WTI 유가가 하루 만에 <span class="essay-keyword">-7.87%</span> 급락하였고,
+          에너지 인플레이션 완화 기대가 위험자산 전반에 온기를 불어넣었습니다.
+          메타, 아마존, 엔비디아가 일제히 3~4%대 상승하며 나스닥을 이끌었고,
+          그 온기는 태평양을 건너 서울 여의도까지 흘러들었습니다.
+          아직 '비관'과 '회의'가 완전히 걷힌 것은 아닙니다. 그것이 오히려 안심이 되는 이유이기도 합니다.
+        </p>
+
+        <div class="essay-history">
+          <div class="essay-history-label">📜 역사 속 유사 국면 — 2022년 10월, 공포의 저점</div>
+          <div class="essay-history-text">
+            2022년 10월, 미국 연준의 공격적 금리 인상과 우크라이나 전쟁이 겹치며
+            S&P500은 연초 대비 25% 가까이 빠졌습니다. 당시 월가의 분위기는 지금과 놀라울 만큼 닮아 있었습니다.
+            지정학 리스크, 고유가, 인플레이션 고착화, 연준의 매파 스탠스.
+            그러나 바로 그 공포의 절정에서 매수한 투자자들은 이후 12개월 동안 S&P500 기준 30% 가까운 수익을 얻었습니다.
+            역사는 반복되지 않지만, 종종 운율을 맞춥니다.
+          </div>
+        </div>
+
+        <p>
+          외국인 투자자들의 움직임도 주목할 만합니다.
+          4월 10일 이후 외국인은 코스피에서 무려 <span class="essay-keyword">5,082억 원</span>의 순매수를 기록하였습니다.
+          흥미로운 것은 그 방향성입니다. 반도체를 팔고 이차전지를 샀습니다.
+          삼성전자와 SK하이닉스를 매도하면서도 LG에너지솔루션과 삼성SDI에는 공격적으로 베팅하였습니다.
+          이는 단순한 차익실현이 아니라, 섹터 로테이션이라는 보다 정교한 전략적 이동으로 읽힙니다.
+          그들이 어디를 보고 있는지를 읽는 것, 그것이 개인 투자자에게 주어진 숙제입니다.
+        </p>
+
+        <div class="essay-divider">· · ·</div>
+
+        <p>
+          채권 시장은 조금 다른 언어로 말하고 있습니다.
+          국고채 10년물 금리가 <span class="essay-keyword">3.18%</span>로 올라서며 주식 시장의 낙관론에 조용히 제동을 걸고 있습니다.
+          금리가 오른다는 것은 채권 가격이 내린다는 뜻이고, 동시에 미래 현금흐름의 현재 가치가 줄어든다는 의미입니다.
+          특히 성장주에는 보이지 않는 역풍입니다.
+          달러인덱스가 100선 아래로 내려앉은 것은 신흥국 자산에 유리한 신호이지만,
+          한국은행의 다음 행보가 5월 동결(72% 확률)로 굳어지는 흐름 속에서
+          원화와 채권 사이의 긴장감은 당분간 지속될 것으로 보입니다.
+        </p>
+
+        <div class="essay-quote">
+          <div class="essay-quote-text">"시장은 단기적으로는 투표 기계이지만,<br>장기적으로는 저울이다."</div>
+          <div class="essay-quote-source">— 벤저민 그레이엄 (Benjamin Graham, 가치투자의 아버지)</div>
+        </div>
+
+        <p>
+          오늘의 시장은 투표 중입니다. 이란 협상이 타결될 것인가, 4월 28~29일 FOMC에서 연준은 어떤 신호를 줄 것인가,
+          삼성전자의 1분기 실적은 기대를 충족할 것인가. 이 세 가지 질문에 시장은 아직 답을 내리지 않았습니다.
+          그리고 바로 그 불확실성 속에 기회가 숨어 있습니다.
+          저울이 진짜 가치를 가리키기까지는 시간이 필요합니다. 조급함은 언제나 시장에서 가장 비싼 감정입니다.
+        </p>
+
+        <p>
+          봄은 왔습니다. 코스피 6,000선이 숫자만이 아니라 심리적 저항선을 돌파했다는 점에서
+          이 랠리는 의미가 있습니다. 다만 꽃이 피었다고 겨울이 완전히 물러간 것은 아닙니다.
+          포트폴리오의 절반을 국내 주식에, 나머지를 해외와 채권으로 분산하는 지금의 전략은
+          바로 그 불확실성에 대한 현명한 대비입니다.
+          기회를 쫓되, 리스크를 잊지 마시길 바랍니다.
+        </p>
+
+      </div><!-- /essay-body -->
+
+      <div class="essay-closing">
+        <strong>이번 주 놓치지 말아야 할 세 가지</strong><br>
+        ① 04.28~29 FOMC — 연준의 언어 변화에 주목하십시오.<br>
+        ② 이란 2차 협상 — 타결 시 에너지주 방향이 바뀝니다.<br>
+        ③ 삼성전자 1Q26 실적 (04.30) — 반도체 사이클의 가늠자입니다.
+      </div>
+
+      <div class="essay-tag-row">
+        <span class="essay-tag">#KOSPI6000</span>
+        <span class="essay-tag">#이차전지</span>
+        <span class="essay-tag">#WTI급락</span>
+        <span class="essay-tag">#섹터로테이션</span>
+        <span class="essay-tag">#FOMC</span>
+        <span class="essay-tag">#템플턴</span>
+        <span class="essay-tag">#벤저민그레이엄</span>
+        <span class="essay-tag">#시장대응</span>
+      </div>
+
+    </div><!-- /card -->
+  </div><!-- /essay-wrap -->
+
+  <div class="page-footer">
+    <div class="footer-note">※ 본 에세이는 시장 흐름에 대한 분석적 견해로, 투자 권유가 아닙니다.<br>© 2026 Daily Market Report</div>
+    <div class="footer-logo">DAILY REPORT</div>
+  </div>
+
+</div>
+</div><!-- /main -->
+
+<script>
+// Tab switch
+function showTab(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// Chart defaults
+Chart.defaults.color = '#64748b';
+Chart.defaults.font.family = "'IBM Plex Mono', monospace";
+Chart.defaults.font.size = 10;
+
+const gridColor = 'rgba(30,45,69,0.6)';
+
+// KOSPI
+new Chart(document.getElementById('kospiChart'), {
+  type: 'line',
+  data: {
+    labels: ['04/03','04/04','04/07','04/08','04/09','04/10','04/13','04/14','04/15','04/16','04/17'],
+    datasets: [{
+      label: 'KOSPI',
+      data: [5730, 5612, 5480, 5510, 5820, 5910, 5796, 5840, 5980, 6048, 6091],
+      borderColor: '#00c8ff',
+      backgroundColor: 'rgba(0,200,255,0.06)',
+      borderWidth: 2,
+      pointRadius: 3,
+      pointBackgroundColor: '#00c8ff',
+      fill: true,
+      tension: 0.3
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => ' ' + c.parsed.y.toLocaleString() } } },
+    scales: {
+      x: { grid: { color: gridColor }, ticks: { maxRotation: 0 } },
+      y: { grid: { color: gridColor }, min: 5400, ticks: { callback: v => v.toLocaleString() } }
+    }
+  }
+});
+
+// KOSDAQ
+new Chart(document.getElementById('kosdaqChart'), {
+  type: 'line',
+  data: {
+    labels: ['04/03','04/04','04/07','04/08','04/09','04/10','04/13','04/14','04/15','04/16','04/17'],
+    datasets: [{
+      label: 'KOSDAQ',
+      data: [1074, 1042, 1021, 1038, 1081, 1098, 1079, 1092, 1108, 1115, 1120],
+      borderColor: '#00ff9d',
+      backgroundColor: 'rgba(0,255,157,0.06)',
+      borderWidth: 2,
+      pointRadius: 3,
+      pointBackgroundColor: '#00ff9d',
+      fill: true,
+      tension: 0.3
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => ' ' + c.parsed.y.toFixed(2) } } },
+    scales: {
+      x: { grid: { color: gridColor }, ticks: { maxRotation: 0 } },
+      y: { grid: { color: gridColor }, min: 1000 }
+    }
+  }
+});
+
+// Sector heatmap
+const sectors = [
+  { name: '이차전지', chg: +3.21, color: [0,230,118] },
+  { name: '반도체', chg: +2.14, color: [0,200,255] },
+  { name: '자동차', chg: +1.08, color: [0,200,255] },
+  { name: '금융', chg: +0.74, color: [0,200,255] },
+  { name: '바이오', chg: +0.52, color: [0,200,255] },
+  { name: '철강', chg: +2.67, color: [0,230,118] },
+  { name: 'IT하드웨어', chg: +1.31, color: [0,200,255] },
+  { name: '통신', chg: +0.18, color: [148,163,184] },
+  { name: '유통', chg: -0.24, color: [255,184,48] },
+  { name: '건설', chg: -0.41, color: [255,184,48] },
+  { name: '에너지', chg: -2.16, color: [255,77,109] },
+  { name: '화학', chg: -0.88, color: [255,120,140] },
+  { name: '소재', chg: -0.33, color: [255,184,48] },
+  { name: '음식료', chg: -0.62, color: [255,120,140] },
+  { name: '게임', chg: +1.44, color: [0,200,255] },
+];
+
+const heatmap = document.getElementById('sectorHeatmap');
+sectors.forEach(s => {
+  const cell = document.createElement('div');
+  cell.className = 'hmap-cell';
+  const [r,g,b] = s.color;
+  const opacity = Math.min(0.85, 0.15 + Math.abs(s.chg) * 0.15);
+  cell.style.background = `rgba(${r},${g},${b},${opacity})`;
+  cell.innerHTML = `<div class="hmap-name">${s.name}</div><div class="hmap-chg" style="color:rgb(${r},${g},${b})">${s.chg > 0 ? '+' : ''}${s.chg.toFixed(2)}%</div>`;
+  heatmap.appendChild(cell);
+});
+
+// Flow chart
+new Chart(document.getElementById('flowChart'), {
+  type: 'bar',
+  data: {
+    labels: ['04/11','04/13','04/14','04/15','04/16','04/17'],
+    datasets: [
+      { label: '외국인', data: [1240, 2180, -980, 3214, 4120, 5082], backgroundColor: ctx => ctx.parsed.y >= 0 ? 'rgba(0,200,255,0.7)' : 'rgba(255,77,109,0.6)' },
+      { label: '기관', data: [-430, 820, -1240, 1542, 2310, 3140], backgroundColor: ctx => ctx.parsed.y >= 0 ? 'rgba(0,255,157,0.6)' : 'rgba(255,184,48,0.6)' },
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: true, labels: { boxWidth: 10, font: { size: 10 } } } },
+    scales: {
+      x: { grid: { color: gridColor }, ticks: { maxRotation: 0 } },
+      y: { grid: { color: gridColor }, ticks: { callback: v => (v/1000).toFixed(1)+'k' } }
+    }
+  }
+});
+
+// Yield curve
+new Chart(document.getElementById('yieldCurveChart'), {
+  type: 'line',
+  data: {
+    labels: ['1M','3M','6M','1Y','2Y','3Y','5Y','10Y','20Y','30Y'],
+    datasets: [
+      { label: '현재(04.16)', data: [2.61, 2.72, 2.76, 2.74, 2.84, 2.94, 3.06, 3.18, 3.10, 3.08], borderColor: '#ffb830', backgroundColor: 'rgba(255,184,48,0.06)', borderWidth: 2, pointRadius: 4, fill: true, tension: 0.3 },
+      { label: '1개월전', data: [2.48, 2.60, 2.64, 2.61, 2.71, 2.78, 2.91, 3.01, 2.95, 2.96], borderColor: '#64748b', borderWidth: 1.5, borderDash: [4,3], pointRadius: 2, tension: 0.3 },
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: true, labels: { boxWidth: 10, font: { size: 10 } } } },
+    scales: {
+      x: { grid: { color: gridColor } },
+      y: { grid: { color: gridColor }, min: 2.3, max: 3.4, ticks: { callback: v => v.toFixed(2)+'%' } }
+    }
+  }
+});
+
+// Spread chart
+new Chart(document.getElementById('spreadChart'), {
+  type: 'line',
+  data: {
+    labels: ['01월','02월','03월','04/01','04/08','04/10','04/14','04/17'],
+    datasets: [{
+      label: '10년-3년 스프레드(bp)',
+      data: [18, 21, 19, 22, 23, 24, 24, 24],
+      borderColor: '#00c8ff',
+      backgroundColor: 'rgba(0,200,255,0.08)',
+      borderWidth: 2,
+      fill: true,
+      tension: 0.3,
+      pointRadius: 3
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => ' ' + c.parsed.y + 'bp' } } },
+    scales: {
+      x: { grid: { color: gridColor } },
+      y: { grid: { color: gridColor }, ticks: { callback: v => v + 'bp' } }
+    }
+  }
+});
+
+// BOK rate chart
+new Chart(document.getElementById('bokChart'), {
+  type: 'line',
+  data: {
+    labels: ['\'24.01','\'24.10','\'24.11','\'25.01','\'25.02','\'25.05','\'26.01','\'26.02'],
+    datasets: [{
+      label: '기준금리(%)',
+      data: [3.50, 3.25, 3.00, 2.75, 2.75, 2.50, 2.50, 2.50],
+      borderColor: '#ffb830',
+      backgroundColor: 'rgba(255,184,48,0.06)',
+      borderWidth: 2,
+      fill: true,
+      stepped: true,
+      pointRadius: 4,
+      pointBackgroundColor: '#ffb830'
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { grid: { color: gridColor }, ticks: { maxRotation: 20, font: { size: 9 } } },
+      y: { grid: { color: gridColor }, min: 2.0, max: 4.0, ticks: { callback: v => v.toFixed(2)+'%' } }
+    }
+  }
+});
+
+// Global comparison
+new Chart(document.getElementById('globalChart'), {
+  type: 'bar',
+  data: {
+    labels: ['코스피', '코스닥', '닛케이', 'S&P500', '나스닥', '상해', '항셍'],
+    datasets: [{
+      label: '1개월 수익률(%)',
+      data: [5.81, 4.27, -1.24, 3.42, 4.18, -0.82, 1.93],
+      backgroundColor: d => d.parsed.y >= 0 ? 'rgba(0,200,255,0.65)' : 'rgba(255,77,109,0.6)',
+      borderRadius: 4,
+      borderSkipped: false,
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { grid: { color: gridColor } },
+      y: { grid: { color: gridColor }, ticks: { callback: v => v + '%' } }
+    }
+  }
+});
+
+// Allocation doughnut
+new Chart(document.getElementById('allocationChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['국내주식','해외주식','채권','대안/현금'],
+    datasets: [{
+      data: [45, 25, 20, 10],
+      backgroundColor: ['rgba(0,230,118,0.7)','rgba(0,200,255,0.7)','rgba(255,184,48,0.7)','rgba(148,163,184,0.5)'],
+      borderColor: ['#00e676','#00c8ff','#ffb830','#64748b'],
+      borderWidth: 1.5
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    cutout: '65%',
+    plugins: {
+      legend: { position: 'right', labels: { boxWidth: 10, font: { size: 10 }, color: '#94a3b8' } }
+    }
+  }
+});
+</script>
+</body>
+</html>
